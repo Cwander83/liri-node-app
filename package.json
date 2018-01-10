@@ -1,0 +1,29 @@
+{
+  "name": "chris",
+  "version": "1.0.0",
+  "description": "node homework",
+  "main": "keys.js",
+  "scripts": {
+    "test": "hi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cwander83/liri-node-app.git"
+  },
+  "keywords": [
+    "app"
+  ],
+  "author": "chris wander",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cwander83/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/Cwander83/liri-node-app#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "inquirer": "^5.0.0",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.83.0",
+    "twitter": "^1.7.1"
+  }
+}
