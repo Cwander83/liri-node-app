@@ -1,0 +1,3 @@
+things to fix
+-change the number of the tweets to start from 1 not 0
+-clean up the call of the functions prop to a switch from a if else
