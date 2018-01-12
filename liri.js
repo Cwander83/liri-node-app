@@ -12,11 +12,8 @@ fs.readFile("random.txt", "utf8", function (error, data) {
     if (error) {
         return console.log("readfile: " + error);
     } else if (userInput === "my-tweets") {
-        console.log(Tweets());
     } else if (userInput === "spotify-this-song") {
-        console.log(spotifySearch());
     } else if (userInput === "movie-this") {
-        console.log(movieSearch());
     }
 });
 
@@ -53,7 +50,6 @@ function spotifySearch() {
     spotify.search({
         type: 'track',
         query: Input,
-        limit: 5
     }, function (err, data) {
         let song = data.tracks.items[0];
         if (err) {
@@ -68,6 +64,7 @@ function spotifySearch() {
 }
 //function for the movie search----------
 function movieSearch() {
+
     request("http://www.omdbapi.com/?t=" + Input + "&y=&plot=short&apikey=83c5fdcd", function (error, response, body) {
 
         movie = JSON.parse(body);
@@ -81,7 +78,6 @@ function movieSearch() {
             console.log("Rotten Tomatoes Rating: " + movie.Ratings[1].Value);
             console.log("Plot: " + movie.Plot);
         }
-        console.log(object);
 
     });
 
