@@ -4,33 +4,52 @@ const Twitter = require('twitter');
 const Spotify = require('node-spotify-api');
 const request = require("request");
 const fs = require("fs");
+const userInput = process.argv[2];
+let Input = process.argv;
+let titleInput = "";
+//calling
+string()
 
-var userInput = process.argv[2];
-var Input = process.argv[3];
 
 fs.readFile("random.txt", "utf8", function (error, data) {
     if (error) {
         return console.log("readfile: " + error);
     } else if (userInput === "my-tweets") {
+        Tweets();
     } else if (userInput === "spotify-this-song") {
+        spotifySearch();
     } else if (userInput === "movie-this") {
+        movieSearch();
     }
 });
 
 // functions ------------------------------------
 
+// functions to turn multiple word titles into a single string for the song and  movie input
+function string() {
+    for (var j = 3; j < Input.length; j++) {
+        if (j > 3 && j < Input.length) {
+            titleInput = titleInput + "+" + Input[j];
+        } else {
+            titleInput += Input[j];
+        }
+    }
+}
+
 //function for twitter to find the last 20 tweets
 //from the dummy account i created
 function Tweets() {
+
     const client = new Twitter(keys.twitter);
+
     var params = {
         screen_name: 'chriswandermail',
-        count: 21
+        count: 20
     };
 
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
         if (!error) {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 1; i < 20; i++) {
                 console.log("");
                 console.log("#" + i + ": " + tweets[i].created_at);
                 console.log(tweets[i].text);
@@ -49,36 +68,50 @@ function spotifySearch() {
 
     spotify.search({
         type: 'track',
-        query: Input,
+        query: titleInput
+
     }, function (err, data) {
         let song = data.tracks.items[0];
         if (err) {
             return console.log('Error occurred: ' + err);
         };
-        console.log(data.tracks.href);
-        console.log("function spotify: " + song.name);
-        console.log("function spotify: " + song.album.name);
-        console.log("function spotify: " + song.href);
+
+        console.log("--------------------------------------------");
+        console.log("     **Spotify Song Search**      ");
+        console.log("\n Top Artist in Search: " + song.artists[0].name);
+        console.log("\n Name of track: " + song.name);
+        console.log("\n Name of the Album: " + song.album.name);
+        console.log("\n URL to Preview Song: " + song.preview_url);
+        console.log("--------------------------------------------");
+        //console.log(JSON.stringify(data, null, 2));
     });
 
 }
 //function for the movie search----------
-function movieSearch() {
+function movieSearch(titleInput) {
+    if (!titleInput) {
+        console.log("");
+        console.log("no movie entered check this movie out");
+        titleInput = 'Mr. Nobody';
+    }
+    request("http://www.omdbapi.com/?t=" + titleInput + "&y=&plot=short&apikey=83c5fdcd", function (error, response, body) {
 
-    request("http://www.omdbapi.com/?t=" + Input + "&y=&plot=short&apikey=83c5fdcd", function (error, response, body) {
+        let movie = JSON.parse(body);
 
-        movie = JSON.parse(body);
-        if (!error) {
-            console.log("Movie Name: " + movie.Title);
-            console.log("Release Year: " + movie.Year);
-            console.log("Actors: " + movie.Actors);
-            console.log("Language: " + movie.Language);
-            console.log("Country where the movie was produced: " + movie.Country);
-            console.log("imdbRating: " + movie.imdbRating);
-            console.log("Rotten Tomatoes Rating: " + movie.Ratings[1].Value);
-            console.log("Plot: " + movie.Plot);
+        if (!error && response.statusCode === 200) {
+
+            console.log("---------------------------------------");
+            console.log("\n     **OMDB Movie Information**");
+            console.log("\nMovie Name: " + movie.Title);
+            console.log("\nRelease Year: " + movie.Year);
+            console.log("\nActors: " + movie.Actors);
+            console.log("\nLanguage: " + movie.Language);
+            console.log("\nCountry where the movie was produced: " + movie.Country);
+            console.log("\nimdbRating: " + movie.imdbRating);
+            console.log("\nRotten Tomatoes Rating: " + movie.Ratings[1].Value);
+            console.log("\nPlot: " + movie.Plot);
+        } else {
+            console.log("Movie error: " + error);
         }
-
     });
-
 }

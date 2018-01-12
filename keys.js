@@ -1,3 +1,4 @@
+//console.log('keys page is connected');
 
 exports.twitter = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
