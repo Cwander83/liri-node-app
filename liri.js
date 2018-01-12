@@ -7,7 +7,7 @@ const fs = require("fs");
 const userInput = process.argv[2];
 let Input = process.argv;
 let titleInput = "";
-//calling
+// calling multi word titles to one
 string()
 
 
@@ -65,30 +65,35 @@ function Tweets() {
 // function for spotify, to search for songs,
 function spotifySearch() {
     const spotify = new Spotify(keys.spotify);
+    if (!titleInput) {
+        console.log("");
+        console.log("no song entered, check out Ace of Base");
+        titleInput = 'The Sign';
+    }
 
     spotify.search({
         type: 'track',
-        query: titleInput
-
+        query: '"' + titleInput + '"'
     }, function (err, data) {
         let song = data.tracks.items[0];
         if (err) {
-            return console.log('Error occurred: ' + err);
-        };
-
-        console.log("--------------------------------------------");
-        console.log("     **Spotify Song Search**      ");
-        console.log("\n Top Artist in Search: " + song.artists[0].name);
-        console.log("\n Name of track: " + song.name);
-        console.log("\n Name of the Album: " + song.album.name);
-        console.log("\n URL to Preview Song: " + song.preview_url);
-        console.log("--------------------------------------------");
-        //console.log(JSON.stringify(data, null, 2));
+            return console.log("spotify error: " + err);
+        } else {
+            console.log("--------------------------------------------");
+            console.log("     **Spotify Song Search**      ");
+            console.log("\n *Top Artist in Search: \n" + song.artists[0].name);
+            console.log("\n *Name of track: \n" + song.name);
+            console.log("\n *Name of the Album: \n" + song.album.name);
+            console.log("\n *URL to Preview Song: \n");
+            console.log(song.preview_url);
+            console.log("--------------------------------------------");
+            //console.log(JSON.stringify(data, null, 2));
+        }
     });
 
 }
 //function for the movie search----------
-function movieSearch(titleInput) {
+function movieSearch() {
     if (!titleInput) {
         console.log("");
         console.log("no movie entered check this movie out");
