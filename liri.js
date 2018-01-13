@@ -3,29 +3,61 @@ const keys = require("./keys")
 const Twitter = require('twitter');
 const Spotify = require('node-spotify-api');
 const request = require("request");
+const inquirer = require('inquirer');
 const fs = require("fs");
-const userInput = process.argv[2];
+let userInput = process.argv[2];
 let Input = process.argv;
 let titleInput = "";
-// calling multi word titles to one
-string()
+// functions needed to call first
+string();
+command(userInput, titleInput);
 
 
-fs.readFile("random.txt", "utf8", function (error, data) {
-    if (error) {
-        return console.log("readfile: " + error);
-    } else if (userInput === "my-tweets") {
-        Tweets();
-    } else if (userInput === "spotify-this-song") {
-        spotifySearch();
-    } else if (userInput === "movie-this") {
-        movieSearch();
+inquirer.prompt([
+    {
+        type: "checkbox",
+        name: "UserInput",
+        message: "Please choice which command to continue",
+        choices: ["my-tweets", "Spotify", "OMDB", "Do What It Says"]
+    },
+    {
+        type: "confirm",
+        message: "Are you sure:",
+        name: "confirm",
+        default: true
+      },
+
+
+
+]).then(function (choices) {
+    if (choices.confirm){
+    command(choices.userInput);
+    console.log(choices.userInput);
     }
 });
 
-// functions ------------------------------------
 
-// functions to turn multiple word titles into a single string for the song and  movie input
+// main function control the user request
+function command(userInput, titleInput) {
+    switch (userInput) {
+        case "spotify-this-song":
+            spotifySearch();
+            break;
+        case "movie-this":
+            movieSearch();
+            break;
+        case "my-tweets":
+            Tweets();
+            break;
+        case "do-what-it-says":
+            doWhat();
+            break;
+    }
+}
+
+
+
+// function to turn multiple word titles into a single string for the song and  movie input
 function string() {
     for (var j = 3; j < Input.length; j++) {
         if (j > 3 && j < Input.length) {
@@ -35,6 +67,7 @@ function string() {
         }
     }
 }
+
 
 //function for twitter to find the last 20 tweets
 //from the dummy account i created
@@ -49,12 +82,11 @@ function Tweets() {
 
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
         if (!error) {
-            for (let i = 1; i < 20; i++) {
-                console.log("");
-                console.log("#" + i + ": " + tweets[i].created_at);
-                console.log(tweets[i].text);
-                console.log("");
-                console.log("=======================");
+            for (let i = 0; i < tweets.length; i++) {
+
+                console.log("\nCreated At: \n" + tweets[i].created_at);
+                console.log("\n" + tweets[i].text);
+                console.log("\n=======================");
                 // console.log(materials.map(material => material.length));
             }
         } else {
@@ -62,6 +94,9 @@ function Tweets() {
         }
     });
 }
+
+
+
 // function for spotify, to search for songs,
 function spotifySearch() {
     const spotify = new Spotify(keys.spotify);
@@ -92,6 +127,8 @@ function spotifySearch() {
     });
 
 }
+
+
 //function for the movie search----------
 function movieSearch() {
     if (!titleInput) {
@@ -118,5 +155,20 @@ function movieSearch() {
         } else {
             console.log("Movie error: " + error);
         }
+    });
+}
+
+
+
+//function for the do-what-it-says command
+// it goes to the random.txt page and display the data
+function doWhat() {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+        if (error) {
+            return console.log("doWhat error: " + error);
+        }
+        let random = data.split(",");
+        titleInput = random[1];
+        command(random[0], titleInput);
     });
 }
