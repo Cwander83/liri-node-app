@@ -1,0 +1,39 @@
+data to appendfunction command(userInput, titleInput) {
+    switch (userInput) {
+        case "spotify-this-song":
+
+            inquirer.prompt([{
+
+                    type: "type",
+                    name: "song",
+                    message: "Enter a Track",
+
+                }
+
+            ]).then(function (choices) {
+                console.log(choices);
+
+
+
+            });
+            spotifySearch();
+            break;
+        case "movie-this":
+            movieSearch();
+            break;
+        case "my-tweets":
+            Tweets();
+            break;
+        case "do-what-it-says":
+            doWhat();
+            break;
+
+        default:
+            console.log("default");
+
+    }
+    fs.appendFile('log.txt', command, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+}my-tweetsmy-tweetsundefinedmy-tweets

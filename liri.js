@@ -12,35 +12,36 @@ let titleInput = "";
 string();
 command(userInput, titleInput);
 
+//******NOT WORKING **** */
+// inquirer.prompt([{
 
-inquirer.prompt([
-    {
-        type: "checkbox",
-        name: "UserInput",
-        message: "Please choice which command to continue",
-        choices: ["my-tweets", "Spotify", "OMDB", "Do What It Says"]
-    },
-    {
-        type: "confirm",
-        message: "Are you sure:",
-        name: "confirm",
-        default: true
-      },
+//         type: "list",
+//         name: "userInput",
+//         message: "Please choice which command to continue",
+//         choices: ["my-tweets", "Spotify", "OMDB", "Do What It Says"]
+//     }
 
+// ]).then(function (choices) {
 
+//     command(choices.userInput);
+//     console.log(choices);
 
-]).then(function (choices) {
-    if (choices.confirm){
-    command(choices.userInput);
-    console.log(choices.userInput);
-    }
-});
+// });
 
 
 // main function control the user request
 function command(userInput, titleInput) {
     switch (userInput) {
         case "spotify-this-song":
+
+            // inquirer.prompt([{
+            //         type: "type",
+            //         name: "song",
+            //         message: "Enter a Track",
+            //     }
+            // ]).then(function (choices) {
+            //     console.log(choices);
+            // });
             spotifySearch();
             break;
         case "movie-this":
@@ -52,9 +53,17 @@ function command(userInput, titleInput) {
         case "do-what-it-says":
             doWhat();
             break;
-    }
-}
 
+        default:
+            console.log("default");
+
+    }
+    //NOT WORKING PROPERLY===========================
+    // fs.appendFile('log.txt', userInput, function (err) {
+    //     if (err) throw err;
+    //     console.log('Saved!');
+    // });
+}
 
 
 // function to turn multiple word titles into a single string for the song and  movie input
