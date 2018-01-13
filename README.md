@@ -1,9 +1,9 @@
 
 # LIRI Bot
-###Overview
+### Overview
 while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI will be a command line node app that takes in parameters and gives you back data.
 
-###How to run LIRI
+### How to run LIRI
 *Open the Terminal for the file liri.js
 *Next start by typing *node liri.js*
     *Then proceed to enter one of this bot's four commands
